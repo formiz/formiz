@@ -1,0 +1,8 @@
+*/target/
+*.classpath
+*/*.classpath
+*.project
+*.settingsh
+formiz-core/.classpath
+/target/
+/.settings/
