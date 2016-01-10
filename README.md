@@ -1,5 +1,7 @@
 # Formiz
 
+![Build status](https://api.travis-ci.org/formiz/formiz.svg?branch=master)
+
 At its core, Formiz is a simple rule engine, targeted to web applications.
 
 Rules are described in a native language and can be loading from different sources, such as Excel files, reducing effort between business teams and developement teams.
