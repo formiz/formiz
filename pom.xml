@@ -27,6 +27,7 @@
 
 	<modules>
 		<module>formiz-core</module>
+		<module>formiz-input-fods</module>
 	</modules>
 
 	<build>
