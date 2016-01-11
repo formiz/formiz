@@ -15,7 +15,7 @@ It contains several modules :
 ## FAQ
 
 ### Some modules are missing ? 
-Formiz is currently being open-sources. Several module require cleanup / refactoring. They will be added as soon as they are ready.
+Formiz is currently being open-sourced. Several modules require cleanup / refactoring. They will be added as soon as they are ready.
 
 ### Is Formiz stable ?
 
