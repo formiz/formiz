@@ -61,9 +61,8 @@ public abstract class AbstractInputSource implements InputSource {
 	 * @param resource
 	 *            Resource path. Lookup is performed first on the classpath. If
 	 *            no file matches, resources is open as a file system resource.
-	 * @throws IOException
 	 */
-	public AbstractInputSource(String resource) throws IOException {
+	public AbstractInputSource(String resource) {
 		this.resource = resource;
 	}
 
