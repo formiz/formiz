@@ -30,10 +30,11 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr.impl;
+package org.formiz.core.expr.spel;
 
 import org.formiz.core.expr.IExpression;
 import org.formiz.core.expr.IParser;
+import org.formiz.core.expr.impl.ParseException;
 import org.springframework.expression.common.TemplateAwareExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 

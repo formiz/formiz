@@ -30,40 +30,41 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr.impl;
+package org.formiz.core.expr.js.dummy;
 
-import org.formiz.core.expr.IContext;
 import org.formiz.core.expr.IExpression;
-import org.springframework.expression.Expression;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.formiz.core.expr.IParser;
+import org.formiz.core.expr.impl.ParseException;
 
-public class ElExpression implements IExpression {
+/**
+ * This parser creates dummy expressions. These expressions throw an exception
+ * when used.
+ *
+ * @author Nicolas Richeton
+ *
+ */
+public class DummyExpressionParser implements IParser {
 
-	/**
-	 * formalite[ ] => var.?
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.formiz.core.expr.IParser#init()
 	 */
-	Expression expr;
-	String text;
-
-	public ElExpression(Expression e) {
-		expr = e;
-	}
-
 	@Override
-	public String getText() {
-		return text;
+	public void init() {
+		// No init required
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.formiz.core.expr.IParser#parseExpression(java.lang.String)
+	 */
 	@Override
-	public Object getValue(IContext context) {
-		ElContext ctx = (ElContext) context;
-		StandardEvaluationContext spelContext = ctx.getSpelContext();
-
-		return expr.getValue(spelContext);
+	public IExpression parseExpression(String expressionString) throws ParseException {
+		DummyExpression basicExpression = new DummyExpression(expressionString);
+		basicExpression.setText(expressionString);
+		return basicExpression;
 	}
 
-	@Override
-	public void setText(String text) {
-		this.text = text;
-	}
 }

@@ -1,8 +1,8 @@
 package org.formiz.core.expr.test1;
 
-import org.formiz.core.expr.impl.ElExpressionParser;
 import org.formiz.core.expr.impl.ExpressionParserUtil;
 import org.formiz.core.expr.impl.FrenchExpressionParser;
+import org.formiz.core.expr.spel.ElExpressionParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

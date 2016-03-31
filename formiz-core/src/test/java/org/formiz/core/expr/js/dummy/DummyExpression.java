@@ -36,7 +36,8 @@ import org.formiz.core.expr.IContext;
 import org.formiz.core.expr.IExpression;
 
 /**
- * Javascript-based expression.
+ * Dummy expression implementation. Will throw an exception on
+ * {@link #getValue(IContext)}
  *
  * @author Nicolas Richeton
  *

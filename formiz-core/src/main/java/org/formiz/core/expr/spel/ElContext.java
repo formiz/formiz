@@ -31,7 +31,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package org.formiz.core.expr.impl;
+package org.formiz.core.expr.spel;
 
 import java.lang.reflect.Method;
 import java.util.Map;
