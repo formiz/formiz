@@ -30,35 +30,43 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package org.formiz.core.expr.js.dummy;
 
-package org.formiz.core.input;
+import org.formiz.core.expr.IContext;
+import org.formiz.core.expr.IExpression;
 
-import java.io.IOException;
+/**
+ * Dummy expression implementation. Will throw an exception on
+ * {@link #getValue(IContext)}
+ *
+ * @author Nicolas Richeton
+ *
+ */
+public class DummyExpression implements IExpression {
 
-import org.formiz.core.expr.impl.FrenchExpressionParser;
-import org.formiz.core.expr.spel.ElContext;
-import org.formiz.core.expr.spel.ElExpressionParser;
-import org.formiz.core.impl.ExpressionElement;
-import org.formiz.core.impl.InMemoryMetadata;
-import org.formiz.core.impl.ReloadableMetadata;
-import org.formiz.core.input.csv.ExpressionCsvInputSource;
-import org.junit.Assert;
-import org.junit.Test;
+	String expr;
+	String text;
 
-public class ExpressionCsvInputSourceTest {
-
-	@Test
-	public void csvTest() throws IOException {
-		ReloadableMetadata m = new ReloadableMetadata();
-		m.setType(InMemoryMetadata.class.getCanonicalName());
-		m.setParser(new FrenchExpressionParser(new ElExpressionParser()));
-		m.setInputSources(new ExpressionCsvInputSource("/org/formiz/core/input/sample.csv"));
-		m.init();
-
-		// Test get
-		ExpressionElement e = (ExpressionElement) m.getElement("group1", "id1");
-		Assert.assertTrue((Boolean) e.getExpression().getValue(new ElContext()));
-
+	public DummyExpression(String e) {
+		expr = e;
 	}
 
+	public String getExpression() {
+		return expr;
+	}
+
+	@Override
+	public String getText() {
+		return text;
+	}
+
+	@Override
+	public Object getValue(IContext context) {
+		throw new RuntimeException("Cannot eval expressions at all - Dummy implementation");
+	}
+
+	@Override
+	public void setText(String text) {
+		this.text = text;
+	}
 }

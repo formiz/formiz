@@ -35,9 +35,9 @@ package org.formiz.core.impl;
 
 import java.io.IOException;
 
-import org.formiz.core.expr.impl.ElContext;
-import org.formiz.core.expr.impl.ElExpressionParser;
 import org.formiz.core.expr.impl.FrenchExpressionParser;
+import org.formiz.core.expr.spel.ElContext;
+import org.formiz.core.expr.spel.ElExpressionParser;
 import org.formiz.core.input.csv.ExpressionCsvInputSource;
 import org.junit.Assert;
 import org.junit.Test;

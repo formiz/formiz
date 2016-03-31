@@ -35,9 +35,9 @@ package org.formiz.core.input;
 
 import java.io.IOException;
 
-import org.formiz.core.expr.impl.ElContext;
-import org.formiz.core.expr.impl.ElExpressionParser;
 import org.formiz.core.expr.impl.FrenchExpressionParser;
+import org.formiz.core.expr.spel.ElContext;
+import org.formiz.core.expr.spel.ElExpressionParser;
 import org.formiz.core.impl.ExpressionElement;
 import org.formiz.core.impl.InMemoryMetadata;
 import org.formiz.core.impl.ReloadableMetadata;

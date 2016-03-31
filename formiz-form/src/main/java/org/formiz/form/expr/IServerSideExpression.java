@@ -30,40 +30,27 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr.js.dummy;
+package org.formiz.form.expr;
 
-import org.formiz.core.expr.IExpression;
-import org.formiz.core.expr.IParser;
-import org.formiz.core.expr.impl.ParseException;
+import java.util.Set;
 
 /**
- * This parser uses Javascript to evaluation expressions.
- *
+ * This is a form expression and can be evaluated on the server side.
+ * 
  * @author Nicolas Richeton
  *
  */
-public class DummyExpressionParser implements IParser {
+public interface IServerSideExpression {
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.formiz.core.expr.IParser#init()
+	/**
+	 * If the list is not empty, this expression depends on other values
+	 * (fields) to be evaluated.
+	 * <p>
+	 * Since we are on the server-side, all dependencies are listed whether they
+	 * are located on the same page or on a different one.
+	 * 
+	 * @return dependencies set.
 	 */
-	@Override
-	public void init() {
-		// No init required
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.formiz.core.expr.IParser#parseExpression(java.lang.String)
-	 */
-	@Override
-	public IExpression parseExpression(String expressionString) throws ParseException {
-		DummyExpression basicExpression = new DummyExpression(expressionString);
-		basicExpression.setText(expressionString);
-		return basicExpression;
-	}
+	Set<String> getDependencies();
 
 }

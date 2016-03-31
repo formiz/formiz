@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This class injects functions and dynamic variables in a FormizContext.
  * <p>
- * These objects are configured in the context builder on startup and can ba
+ * These objects are configured in the context builder on startup and can be
  * applied on the Formiz context before expression evaluation.
  *
  */

@@ -30,42 +30,50 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr.js.dummy;
+package org.formiz.core.expr.spel;
 
-import org.formiz.core.expr.IContext;
 import org.formiz.core.expr.IExpression;
+import org.formiz.core.expr.IParser;
+import org.formiz.core.expr.impl.ParseException;
+import org.springframework.expression.common.TemplateAwareExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 /**
- * Javascript-based expression.
+ * This parser uses Spring Expression language.
  *
- * @author Nicolas Richeton
+ * @author nricheton
  *
  */
-public class DummyExpression implements IExpression {
+public class ElExpressionParser implements IParser {
 
-	String expr;
-	String text;
+	TemplateAwareExpressionParser parser = new SpelExpressionParser();
 
-	public DummyExpression(String e) {
-		expr = e;
-	}
-
-	public String getExpression() {
-		return expr;
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.formiz.core.expr.IParser#init()
+	 */
 	@Override
-	public String getText() {
-		return text;
+	public void init() {
+		// No init required
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.formiz.core.expr.IParser#parseExpression(java.lang.String)
+	 */
 	@Override
-	public Object getValue(IContext context) {
-		throw new RuntimeException("Cannot eval expressions at all - Dummy implementation");
+	public IExpression parseExpression(String expressionString) throws ParseException {
+		try {
+			ElExpression basicExpression = new ElExpression(parser.parseExpression(expressionString));
+			basicExpression.setText(expressionString);
+			return basicExpression;
+		} catch (org.springframework.expression.ParseException e) {
+			throw new ParseException(e, expressionString, expressionString);
+		} catch (IllegalStateException e) {
+			throw new ParseException(e, expressionString, expressionString);
+		}
 	}
 
-	@Override
-	public void setText(String text) {
-		this.text = text;
-	}
 }

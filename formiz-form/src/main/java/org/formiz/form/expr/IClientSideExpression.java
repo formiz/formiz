@@ -30,40 +30,65 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr.impl;
+package org.formiz.form.expr;
 
-import org.formiz.core.expr.IContext;
-import org.formiz.core.expr.IExpression;
-import org.springframework.expression.Expression;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
+import java.util.Set;
 
-public class ElExpression implements IExpression {
+/**
+ * 
+ * This is a form expression and can be evaluated on both the client side and
+ * the server side.
+ * 
+ * @author Nicolas Richeton
+ *
+ */
+public interface IClientSideExpression extends IServerSideExpression {
+	/**
+	 * Get the Javascript expression which can be evaluated in a browser.
+	 * <p>
+	 * It is recommended to replace the server side expressions by they current
+	 * value.
+	 * 
+	 * @return Javascript expression (ready to use).
+	 */
+	String getAsJavascript();
 
 	/**
-	 * formalite[ ] => var.?
+	 * If the list is not empty, this expression depends on other values
+	 * (fields) to be evaluated.
+	 * <p>
+	 * This method returns only the local dependencies, which are usually
+	 * displayed on the same screen. This means that the value of these
+	 * dependencies are more likely change immediately when interacting with the
+	 * form.
+	 * 
+	 * <p>
+	 * This requires to evaluate the expression on the client side.
+	 * 
+	 * @see #getDependencies()
+	 * @see #getGlobalDependencies()
+	 * 
+	 * @return local (same screen/page) dependencies set
 	 */
-	Expression expr;
-	String text;
+	Set<String> getLocalDependencies();
 
-	public ElExpression(Expression e) {
-		expr = e;
-	}
+	/**
+	 * If the list is not empty, this expression depends on other values
+	 * (fields) to be evaluated.
+	 * <p>
+	 * This method returns only the global dependencies, which are usually
+	 * displayed on other/previous pages. This means that the value of these
+	 * dependencies will probably not change.
+	 * 
+	 * <p>
+	 * These values can be optimized on the server side to reduce the cost of
+	 * evaluation on the client side.
+	 * 
+	 * @see #getDependencies()
+	 * @see #getLocalDependencies()
+	 * 
+	 * @return global (other screens/pages) dependencies set
+	 */
+	Set<String> getGlobalDependencies();
 
-	@Override
-	public String getText() {
-		return text;
-	}
-
-	@Override
-	public Object getValue(IContext context) {
-		ElContext ctx = (ElContext) context;
-		StandardEvaluationContext spelContext = ctx.getSpelContext();
-
-		return expr.getValue(spelContext);
-	}
-
-	@Override
-	public void setText(String text) {
-		this.text = text;
-	}
 }

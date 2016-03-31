@@ -35,9 +35,9 @@ package org.formiz.core.expr.test1;
 
 import org.formiz.core.expr.IContext;
 import org.formiz.core.expr.IExpression;
-import org.formiz.core.expr.impl.ElContext;
-import org.formiz.core.expr.impl.ElExpressionParser;
 import org.formiz.core.expr.impl.ParseException;
+import org.formiz.core.expr.spel.ElContext;
+import org.formiz.core.expr.spel.ElExpressionParser;
 import org.formiz.core.expr.test1.model.Address;
 import org.junit.Assert;
 import org.junit.Test;

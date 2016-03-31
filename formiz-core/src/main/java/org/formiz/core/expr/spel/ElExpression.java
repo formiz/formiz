@@ -30,49 +30,40 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr.impl;
+package org.formiz.core.expr.spel;
 
+import org.formiz.core.expr.IContext;
 import org.formiz.core.expr.IExpression;
-import org.formiz.core.expr.IParser;
-import org.springframework.expression.common.TemplateAwareExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
-/**
- * This parser uses Spring Expression language.
- *
- * @author nricheton
- *
- */
-public class ElExpressionParser implements IParser {
+public class ElExpression implements IExpression {
 
-	TemplateAwareExpressionParser parser = new SpelExpressionParser();
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.formiz.core.expr.IParser#init()
+	/**
+	 * formalite[ ] => var.?
 	 */
-	@Override
-	public void init() {
-		// No init required
+	Expression expr;
+	String text;
+
+	public ElExpression(Expression e) {
+		expr = e;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.formiz.core.expr.IParser#parseExpression(java.lang.String)
-	 */
 	@Override
-	public IExpression parseExpression(String expressionString) throws ParseException {
-		try {
-			ElExpression basicExpression = new ElExpression(parser.parseExpression(expressionString));
-			basicExpression.setText(expressionString);
-			return basicExpression;
-		} catch (org.springframework.expression.ParseException e) {
-			throw new ParseException(e, expressionString, expressionString);
-		} catch (IllegalStateException e) {
-			throw new ParseException(e, expressionString, expressionString);
-		}
+	public String getText() {
+		return text;
 	}
 
+	@Override
+	public Object getValue(IContext context) {
+		ElContext ctx = (ElContext) context;
+		StandardEvaluationContext spelContext = ctx.getSpelContext();
+
+		return expr.getValue(spelContext);
+	}
+
+	@Override
+	public void setText(String text) {
+		this.text = text;
+	}
 }

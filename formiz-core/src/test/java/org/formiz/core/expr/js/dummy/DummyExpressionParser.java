@@ -30,35 +30,41 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package org.formiz.core.expr.js.dummy;
 
-package org.formiz.core.input;
+import org.formiz.core.expr.IExpression;
+import org.formiz.core.expr.IParser;
+import org.formiz.core.expr.impl.ParseException;
 
-import java.io.IOException;
+/**
+ * This parser creates dummy expressions. These expressions throw an exception
+ * when used.
+ *
+ * @author Nicolas Richeton
+ *
+ */
+public class DummyExpressionParser implements IParser {
 
-import org.formiz.core.expr.impl.FrenchExpressionParser;
-import org.formiz.core.expr.spel.ElContext;
-import org.formiz.core.expr.spel.ElExpressionParser;
-import org.formiz.core.impl.ExpressionElement;
-import org.formiz.core.impl.InMemoryMetadata;
-import org.formiz.core.impl.ReloadableMetadata;
-import org.formiz.core.input.csv.ExpressionCsvInputSource;
-import org.junit.Assert;
-import org.junit.Test;
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.formiz.core.expr.IParser#init()
+	 */
+	@Override
+	public void init() {
+		// No init required
+	}
 
-public class ExpressionCsvInputSourceTest {
-
-	@Test
-	public void csvTest() throws IOException {
-		ReloadableMetadata m = new ReloadableMetadata();
-		m.setType(InMemoryMetadata.class.getCanonicalName());
-		m.setParser(new FrenchExpressionParser(new ElExpressionParser()));
-		m.setInputSources(new ExpressionCsvInputSource("/org/formiz/core/input/sample.csv"));
-		m.init();
-
-		// Test get
-		ExpressionElement e = (ExpressionElement) m.getElement("group1", "id1");
-		Assert.assertTrue((Boolean) e.getExpression().getValue(new ElContext()));
-
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.formiz.core.expr.IParser#parseExpression(java.lang.String)
+	 */
+	@Override
+	public IExpression parseExpression(String expressionString) throws ParseException {
+		DummyExpression basicExpression = new DummyExpression(expressionString);
+		basicExpression.setText(expressionString);
+		return basicExpression;
 	}
 
 }
