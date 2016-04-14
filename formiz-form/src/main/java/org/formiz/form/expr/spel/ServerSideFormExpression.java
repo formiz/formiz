@@ -30,50 +30,58 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr;
+package org.formiz.form.expr.spel;
 
-/**
- * A formiz expression.
- *
- */
-public interface IExpression {
+import java.util.Set;
 
-	/**
-	 * Returns the underlying (internal) expression string.
-	 * <p>
-	 * Expression may have been changed during parsing. This returns the result,
-	 * as it will be executed on evaluation.
-	 *
-	 * @return
-	 */
-	String getInternalText();
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.formiz.core.expr.IContext;
+import org.formiz.core.expr.IExpression;
+import org.formiz.form.expr.IServerSideExpression;
 
-	/**
-	 * Returns original expression string.
-	 * <p>
-	 * Expression as it was entered by the user, not the internal
-	 * representation.
-	 *
-	 * @return
-	 */
-	String getText();
+public class ServerSideFormExpression implements IExpression, IServerSideExpression {
 
-	/**
-	 * Get expression value in the provided context.
-	 *
-	 * @param context
-	 *            on which the expression should be evaluated.
-	 * @return expression value.
-	 */
-	Object getValue(IContext context);
+	private IExpression expression;
+	private Set<String> staticReferences;
+	private String text;
 
-	/**
-	 * Set the original expression string.
-	 * <p>
-	 * This method should not be called by users. It is reserved for expression
-	 * parsers (IParser).
-	 *
-	 * @param t
-	 */
-	void setText(String t);
+	public ServerSideFormExpression(IExpression expr) {
+		expression = expr;
+	}
+
+	@Override
+	public Set<String> getDependencies() {
+		return staticReferences;
+	}
+
+	@Override
+	public String getInternalText() {
+		return expression.getInternalText();
+	}
+
+	@Override
+	public String getText() {
+		return text;
+	}
+
+	@Override
+	public Object getValue(IContext context) {
+		return expression.getValue(context);
+	}
+
+	public void setDependencies(Set<String> staticReferences) {
+		this.staticReferences = staticReferences;
+	}
+
+	@Override
+	public void setText(String t) {
+		text = t;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+
 }

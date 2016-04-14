@@ -50,6 +50,11 @@ public class ElExpression implements IExpression {
 	}
 
 	@Override
+	public String getInternalText() {
+		return expr.getExpressionString();
+	}
+
+	@Override
 	public String getText() {
 		return text;
 	}

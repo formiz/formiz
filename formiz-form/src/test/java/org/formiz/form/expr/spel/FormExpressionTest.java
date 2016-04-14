@@ -30,48 +30,76 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr.js.dummy;
+
+package org.formiz.form.expr.spel;
 
 import org.formiz.core.expr.IContext;
 import org.formiz.core.expr.IExpression;
+import org.formiz.core.expr.spel.ElContext;
+import org.formiz.core.expr.spel.ElExpressionParser;
+import org.formiz.form.expr.IServerSideExpression;
+import org.formiz.form.expr.spel.model.Address;
+import org.formiz.form.expr.spel.model.User;
+import org.junit.Assert;
+import org.junit.Test;
 
-/**
- * Dummy expression implementation. Will throw an exception on
- * {@link #getValue(IContext)}
- *
- * @author Nicolas Richeton
- *
- */
-public class DummyExpression implements IExpression {
+public class FormExpressionTest {
 
-	String expr;
-	String text;
+	@Test
+	public void addressTest() {
 
-	public DummyExpression(String e) {
-		expr = e;
+		String exprText = "form[company] == true";
+		FormExpressionParser parser = new FormExpressionParser(new ElExpressionParser());
+		parser.setObjectName("form");
+		parser.init();
+
+		IExpression e = parser.parseExpression(exprText);
+
+		// Check expression
+		Address a = new Address();
+
+		IContext context = new ElContext();
+		context.setObject(a, null);
+
+		a.setCompany(false);
+		Assert.assertFalse((Boolean) e.getValue(context));
+
+		a.setCompany(true);
+		Assert.assertTrue((Boolean) e.getValue(context));
+
+		// Check dependencies
+		Assert.assertTrue(((IServerSideExpression) e).getDependencies().contains("company"));
+
 	}
 
-	public String getExpression() {
-		return expr;
+	@Test
+	public void userAddressTest() {
+		FormExpressionParser parser = new FormExpressionParser(new ElExpressionParser());
+		parser.setObjectName("user");
+		parser.init();
+		
+		User u = new User();
+		u.setAddress(new Address());
+
+		// Context
+		IContext context = new ElContext();
+		context.setObject(u, null);
+		// Check expression
+
+		String exprText = "user[address.company] == true";
+
+		IExpression e = parser.parseExpression(exprText);
+
+		u.getAddress().setCompany(false);
+		Assert.assertFalse((Boolean) e.getValue(context));
+
+		u.getAddress().setCompany(true);
+		Assert.assertTrue((Boolean) e.getValue(context));
+
+		// Check dependencies
+		Assert.assertTrue(((IServerSideExpression) e).getDependencies().contains("address.company"));
+
+		
 	}
 
-	@Override
-	public String getInternalText() {
-		return expr;
-	}
-
-	@Override
-	public String getText() {
-		return text;
-	}
-
-	@Override
-	public Object getValue(IContext context) {
-		throw new RuntimeException("Cannot eval expressions at all - Dummy implementation");
-	}
-
-	@Override
-	public void setText(String text) {
-		this.text = text;
-	}
 }

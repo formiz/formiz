@@ -36,7 +36,7 @@ import java.util.Set;
 
 /**
  * This is a form expression and can be evaluated on the server side.
- * 
+ *
  * @author Nicolas Richeton
  *
  */
@@ -48,7 +48,7 @@ public interface IServerSideExpression {
 	 * <p>
 	 * Since we are on the server-side, all dependencies are listed whether they
 	 * are located on the same page or on a different one.
-	 * 
+	 *
 	 * @return dependencies set.
 	 */
 	Set<String> getDependencies();
