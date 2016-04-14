@@ -53,6 +53,11 @@ public class JsExpression implements IExpression {
 	}
 
 	@Override
+	public String getInternalText() {
+		return expr;
+	}
+
+	@Override
 	public String getText() {
 		return text;
 	}

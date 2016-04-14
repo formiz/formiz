@@ -99,13 +99,6 @@ public interface FormizMetadata {
 	List<SimpleElement> getElementsByGroup(String group);
 
 	/**
-	 * Get the current javascript value template.
-	 *
-	 * @return javascript expression template.
-	 */
-	String getJavascriptTemplate();
-
-	/**
 	 * Returns the current parser for expressions contained in elements. This
 	 * allows to share the same parser for performance reasons.
 	 *
@@ -139,23 +132,6 @@ public interface FormizMetadata {
 	 *            List of InputSource implementations.
 	 */
 	void setInputSources(InputSource... source);
-
-	/**
-	 * Defines the javascript expression template used to retrieve a field
-	 * value.
-	 * <p>
-	 * NOTE: This is used by formiz-form and should be moved to this module.
-	 * <p>
-	 * The templace includes '$1' which should be replaces by field name.
-	 * <p>
-	 * This value must be set before initialization ({@link #init()}) and is
-	 * used during element loading.
-	 *
-	 *
-	 * @param jsTemplate
-	 *            The javascript template.
-	 */
-	void setJavascriptTemplate(String jsTemplate);
 
 	/**
 	 * Set the parser to use when reading expressions.

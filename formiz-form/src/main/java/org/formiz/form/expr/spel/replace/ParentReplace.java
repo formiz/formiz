@@ -30,50 +30,56 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr;
+
+package org.formiz.form.expr.spel.replace;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * A formiz expression.
+ * Remplace les patterns parent[ X.Y ] par getParent(X).Y;
  *
  */
-public interface IExpression {
+public class ParentReplace {
 
 	/**
-	 * Returns the underlying (internal) expression string.
-	 * <p>
-	 * Expression may have been changed during parsing. This returns the result,
-	 * as it will be executed on evaluation.
-	 *
+	 * parent\\[([A-Za-z0-9_\\.]+)\\. Ex formalite[reseauCFE]!='A' &&
+	 * parent[dirigeant.conjointPresence]=='oui'
+	 */
+	protected static final Pattern FORM_REF_PARENT = Pattern.compile("parent\\[([A-Za-z0-9_\\.]+)\\.");
+
+	/**
+	 * formalite.reseauCFE!='A' &&
+	 * getParent('dirigeant').conjointPresence=='oui'
+	 */
+	protected static final String FORM_REF_PARENT_STATIC = "getParent('$1').";
+
+	/**
+	 * (stack\\.\\?\\[class.name\\.contains\\(#capitalize\\(
+	 * '[A-Za-z0-9_\\.]+'\\)\\)\\]\\[0\\]\\.[A-Za-z0-9_\\.]+)\\] Ex :
+	 * formalite.reseauCFE!='A' &&
+	 * stack.?[class.name=='dirigeant'].conjointPresence]=='oui'
+	 */
+	private static final Pattern FORM_REF_PARENT_STATIC_2 = Pattern
+			.compile("(getParent\\('[A-Za-z0-9_\\.]+'\\)\\.[A-Za-z0-9_\\.]+)\\]");
+	private static final String VAR_1 = "$1"; //$NON-NLS-1$
+
+	/**
+	 * Execute les remplassement sur l'expression
+	 * 
+	 * @param expr
+	 *            expression a reformatter
 	 * @return
 	 */
-	String getInternalText();
+	public String perform(String expr) {
+		String result;
+		// gestion des parents
+		Matcher m = FORM_REF_PARENT.matcher(expr);
+		result = m.replaceAll(FORM_REF_PARENT_STATIC);
 
-	/**
-	 * Returns original expression string.
-	 * <p>
-	 * Expression as it was entered by the user, not the internal
-	 * representation.
-	 *
-	 * @return
-	 */
-	String getText();
+		m = FORM_REF_PARENT_STATIC_2.matcher(result);
+		result = m.replaceAll(VAR_1);
 
-	/**
-	 * Get expression value in the provided context.
-	 *
-	 * @param context
-	 *            on which the expression should be evaluated.
-	 * @return expression value.
-	 */
-	Object getValue(IContext context);
-
-	/**
-	 * Set the original expression string.
-	 * <p>
-	 * This method should not be called by users. It is reserved for expression
-	 * parsers (IParser).
-	 *
-	 * @param t
-	 */
-	void setText(String t);
+		return result;
+	}
 }

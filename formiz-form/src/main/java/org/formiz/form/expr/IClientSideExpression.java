@@ -35,10 +35,10 @@ package org.formiz.form.expr;
 import java.util.Set;
 
 /**
- * 
+ *
  * This is a form expression and can be evaluated on both the client side and
  * the server side.
- * 
+ *
  * @author Nicolas Richeton
  *
  */
@@ -48,10 +48,29 @@ public interface IClientSideExpression extends IServerSideExpression {
 	 * <p>
 	 * It is recommended to replace the server side expressions by they current
 	 * value.
-	 * 
+	 *
 	 * @return Javascript expression (ready to use).
 	 */
 	String getAsJavascript();
+
+	/**
+	 * If the list is not empty, this expression depends on other values
+	 * (fields) to be evaluated.
+	 * <p>
+	 * This method returns only the global dependencies, which are usually
+	 * displayed on other/previous pages. This means that the value of these
+	 * dependencies will probably not change.
+	 *
+	 * <p>
+	 * These values can be optimized on the server side to reduce the cost of
+	 * evaluation on the client side.
+	 *
+	 * @see #getDependencies()
+	 * @see #getLocalDependencies()
+	 *
+	 * @return global (other screens/pages) dependencies set
+	 */
+	Set<String> getGlobalDependencies();
 
 	/**
 	 * If the list is not empty, this expression depends on other values
@@ -61,34 +80,15 @@ public interface IClientSideExpression extends IServerSideExpression {
 	 * displayed on the same screen. This means that the value of these
 	 * dependencies are more likely change immediately when interacting with the
 	 * form.
-	 * 
+	 *
 	 * <p>
 	 * This requires to evaluate the expression on the client side.
-	 * 
+	 *
 	 * @see #getDependencies()
 	 * @see #getGlobalDependencies()
-	 * 
+	 *
 	 * @return local (same screen/page) dependencies set
 	 */
 	Set<String> getLocalDependencies();
-
-	/**
-	 * If the list is not empty, this expression depends on other values
-	 * (fields) to be evaluated.
-	 * <p>
-	 * This method returns only the global dependencies, which are usually
-	 * displayed on other/previous pages. This means that the value of these
-	 * dependencies will probably not change.
-	 * 
-	 * <p>
-	 * These values can be optimized on the server side to reduce the cost of
-	 * evaluation on the client side.
-	 * 
-	 * @see #getDependencies()
-	 * @see #getLocalDependencies()
-	 * 
-	 * @return global (other screens/pages) dependencies set
-	 */
-	Set<String> getGlobalDependencies();
 
 }

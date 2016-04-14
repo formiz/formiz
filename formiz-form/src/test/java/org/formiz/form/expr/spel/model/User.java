@@ -30,50 +30,35 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package org.formiz.core.expr;
+package org.formiz.form.expr.spel.model;
 
-/**
- * A formiz expression.
- *
- */
-public interface IExpression {
+public class User {
 
-	/**
-	 * Returns the underlying (internal) expression string.
-	 * <p>
-	 * Expression may have been changed during parsing. This returns the result,
-	 * as it will be executed on evaluation.
-	 *
-	 * @return
-	 */
-	String getInternalText();
+	private String firstName, lastName;
+	private Address address;
 
-	/**
-	 * Returns original expression string.
-	 * <p>
-	 * Expression as it was entered by the user, not the internal
-	 * representation.
-	 *
-	 * @return
-	 */
-	String getText();
+	public String getFirstName() {
+		return firstName;
+	}
 
-	/**
-	 * Get expression value in the provided context.
-	 *
-	 * @param context
-	 *            on which the expression should be evaluated.
-	 * @return expression value.
-	 */
-	Object getValue(IContext context);
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-	/**
-	 * Set the original expression string.
-	 * <p>
-	 * This method should not be called by users. It is reserved for expression
-	 * parsers (IParser).
-	 *
-	 * @param t
-	 */
-	void setText(String t);
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
 }

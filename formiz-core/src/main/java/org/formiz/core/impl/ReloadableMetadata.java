@@ -52,7 +52,6 @@ public class ReloadableMetadata implements FormizMetadata {
 
 	private String clazz;
 	private FormizMetadata currentMetadata = null;
-	private String jsTemplate;
 	private IParser parser = null;
 	private InputSource[] source;
 
@@ -77,11 +76,6 @@ public class ReloadableMetadata implements FormizMetadata {
 	}
 
 	@Override
-	public String getJavascriptTemplate() {
-		return jsTemplate;
-	}
-
-	@Override
 	public IParser getParser() {
 		return parser;
 	}
@@ -91,7 +85,7 @@ public class ReloadableMetadata implements FormizMetadata {
 		try {
 			FormizMetadata newMetadata = (FormizMetadata) Class.forName(clazz).newInstance();
 			newMetadata.setInputSources(source);
-			newMetadata.setJavascriptTemplate(jsTemplate);
+
 			newMetadata.setParser(parser);
 			newMetadata.init();
 			currentMetadata = newMetadata;
@@ -124,11 +118,6 @@ public class ReloadableMetadata implements FormizMetadata {
 	@Override
 	public void setInputSources(InputSource... source) {
 		this.source = source;
-	}
-
-	@Override
-	public void setJavascriptTemplate(String jsTemplate) {
-		this.jsTemplate = jsTemplate;
 	}
 
 	@Override

@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Some index are build for fast access to elements.
  * <p>
- * This implementation is not persistant.
+ * This implementation is not persistent.
  *
  */
 public class InMemoryMetadata implements FormizMetadata {
@@ -60,7 +60,7 @@ public class InMemoryMetadata implements FormizMetadata {
 	private final Map<String, SimpleElement> elements;
 	private final Map<String, List<SimpleElement>> elementsByClass;
 	private final Map<String, List<SimpleElement>> elementsByGroup;
-	private String javascriptTemplate = "recupererValeur('$1')"; //$NON-NLS-1$
+
 	private IParser parser = null;
 	private InputSource[] sources;
 
@@ -102,8 +102,7 @@ public class InMemoryMetadata implements FormizMetadata {
 			}
 			elementsOfClass.add(el);
 		} else {
-			LOGGER.warn("L'element id:{} du groupe :{} est en doublon il n'as pas été inséré dans le modèle",
-					el.getId(), el.getGroup());
+			LOGGER.warn("Duplicate element  id:{}  group:{}. The new instance was ignored.", el.getId(), el.getGroup());
 		}
 	}
 
@@ -150,16 +149,6 @@ public class InMemoryMetadata implements FormizMetadata {
 	@Override
 	public List<SimpleElement> getElementsByGroup(String group) {
 		return elementsByGroup.get(group);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.formiz.core.FormizMetadata#getJavascriptTemplate()
-	 */
-	@Override
-	public String getJavascriptTemplate() {
-		return javascriptTemplate;
 	}
 
 	/*
@@ -211,18 +200,6 @@ public class InMemoryMetadata implements FormizMetadata {
 	@Override
 	public void setInputSources(InputSource... sources) {
 		this.sources = sources;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.formiz.core.FormizMetadata#setJavascriptTemplate(java.lang.String)
-	 */
-	@Override
-	public void setJavascriptTemplate(String jsTemplate) {
-		javascriptTemplate = jsTemplate;
-
 	}
 
 	/*
