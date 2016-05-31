@@ -32,6 +32,13 @@
  */
 package org.formiz.core.expr.js;
 
+import java.util.Collections;
+
+import javax.script.Bindings;
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.formiz.core.expr.IContext;
@@ -45,11 +52,29 @@ import org.formiz.core.expr.IExpression;
  */
 public class JsExpression implements IExpression {
 
-	String expr;
-	String text;
+	private final ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
 
-	public JsExpression(String e) {
+	private final String expr;
+
+	private String text;
+
+	final String enhancedExpr;
+
+	private final CompiledScript compiledExpr;
+
+	public JsExpression(final String e) {
 		expr = e;
+		enhancedExpr = "with(Object.bindProperties({}, formizRoot)){ " + expr + " }";
+
+		try {
+			if (engine instanceof Compilable) {
+				compiledExpr = ((Compilable) engine).compile(enhancedExpr);
+			} else {
+				compiledExpr = null;
+			}
+		} catch (final ScriptException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	@Override
@@ -63,24 +88,28 @@ public class JsExpression implements IExpression {
 	}
 
 	@Override
-	public Object getValue(IContext context) {
-		JsContext ctx = (JsContext) context;
+	public Object getValue(final IContext context) {
+		final JsContext ctx = (JsContext) context;
+
+		final Bindings bindings = ctx.getBindings();
+		if (null == ctx.getRoot()) {
+			bindings.put("formizRoot", Collections.emptyMap());
+		}
 
 		try {
-			if (ctx.getRoot() == null) {
-				// No root object
-				return ctx.getEngine().eval(expr);
+			if (null != compiledExpr) {
+				return compiledExpr.eval(ctx.getBindings());
 			} else {
-				// Execute within root object
-				return ctx.getEngine().eval("with(Object.bindProperties({},formizRoot)){" + expr + "}");
+				return engine.eval(enhancedExpr, ctx.getBindings());
 			}
-		} catch (ScriptException e) {
+		} catch (final ScriptException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public void setText(String text) {
+	public void setText(final String text) {
 		this.text = text;
 	}
+
 }

@@ -44,24 +44,14 @@ import org.formiz.core.expr.impl.ParseException;
  */
 public class JsExpressionParser implements IParser {
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.formiz.core.expr.IParser#init()
-	 */
 	@Override
 	public void init() {
 		// No init required
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.formiz.core.expr.IParser#parseExpression(java.lang.String)
-	 */
 	@Override
-	public IExpression parseExpression(String expressionString) throws ParseException {
-		JsExpression basicExpression = new JsExpression(expressionString);
+	public IExpression parseExpression(final String expressionString) throws ParseException {
+		final JsExpression basicExpression = new JsExpression(expressionString);
 		basicExpression.setText(expressionString);
 		return basicExpression;
 	}
