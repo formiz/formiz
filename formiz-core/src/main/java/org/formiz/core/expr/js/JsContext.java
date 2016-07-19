@@ -36,7 +36,7 @@ package org.formiz.core.expr.js;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import javax.script.ScriptContext;
+import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -72,7 +72,7 @@ public class JsContext implements IContext {
 		 *            if we are looking at a children of the main object, use it
 		 *            as root. Can be null, in that case null = object
 		 */
-		public void setObject(Object object, Object root) {
+		public void setObject(final Object object, final Object root) {
 			this.object = object;
 			this.root = root;
 			if (root == null) {
@@ -82,20 +82,18 @@ public class JsContext implements IContext {
 
 	}
 
-	private Context ctx;
+	private final Context ctx;
 
-	ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
+	private final ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
 
-	private SimpleBindings bindings;
+	private final SimpleBindings bindings;
 
 	public JsContext() {
 		ctx = new Context();
 		bindings = new SimpleBindings();
-		engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 	}
 
 	public ScriptEngine getEngine() {
-
 		return engine;
 	}
 
@@ -110,11 +108,10 @@ public class JsContext implements IContext {
 	}
 
 	@Override
-	public void registerFunction(String name, Method method) {
+	public void registerFunction(final String name, final Method method) {
 		try {
-			engine.eval("var _" + name + " = Java.type('" + method.getDeclaringClass().getName() + "')."
-					+ method.getName());
-		} catch (ScriptException e) {
+			setVariable(name, engine.eval("Java.type('" + method.getDeclaringClass().getName() + "')." + method.getName()));
+		} catch (final ScriptException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -127,21 +124,26 @@ public class JsContext implements IContext {
 	 *            root. Can be null, in that case null = object
 	 */
 	@Override
-	public void setObject(Object object, Object root) {
+	public void setObject(final Object object, final Object root) {
 		ctx.setObject(object, root);
 		bindings.put("formizRoot", ctx.getRoot());
 
 	}
 
 	@Override
-	public void setVariable(String name, Object value) {
+	public void setVariable(final String name, final Object value) {
 		bindings.put("_" + name, value);
 	}
 
+	public Bindings getBindings() {
+		return bindings;
+	}
+
 	@Override
-	public void setVariables(Map<String, Object> variables) {
-		for (String name : variables.keySet()) {
+	public void setVariables(final Map<String, Object> variables) {
+		for (final String name : variables.keySet()) {
 			setVariable(name, variables.get(name));
 		}
 	}
+
 }
