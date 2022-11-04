@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class ExpressionParserUtilTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExpressionParserUtilTest.class);
 
-	FrenchExpressionParser parser = new FrenchExpressionParser(new ElExpressionParser());
+	final FrenchExpressionParser parser = new FrenchExpressionParser(new ElExpressionParser());
 
 	@Test
 	public void parsingTest() {
