@@ -1,21 +1,21 @@
 /**
- *  Copyright SCN Guichet Entreprises, Capgemini et contributeurs, (2014-2015)
- *
+ * Copyright SCN Guichet Entreprises, Capgemini et contributeurs, (2014-2015)
+ * <p>
  * This software is a computer program whose purpose is to [describe
  * functionalities and technical features of your software].
- *
+ * <p>
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- *
+ * <p>
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- *
+ * <p>
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -26,15 +26,12 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- *
+ * <p>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
 package org.formiz.form.expr.spel;
-
-import java.util.HashSet;
-import java.util.regex.Pattern;
 
 import org.formiz.core.expr.IExpression;
 import org.formiz.core.expr.IParser;
@@ -42,126 +39,128 @@ import org.formiz.core.expr.impl.ParseException;
 import org.formiz.form.expr.spel.replace.GenericReplace;
 import org.formiz.form.expr.spel.replace.ParentReplace;
 
+import java.util.HashSet;
+import java.util.regex.Pattern;
+
 /**
  * current ->
- *
+ * <p>
  * main object ->
- *
+ * <p>
  * ajax -> method @ajax
- *
+ * <p>
  * parent -> méthod #getParent
- *
+ * <p>
  * Other objects -> Bean resolver @name
- *
+ * <p>
  * Context variables
  *
  * @author Nicolas Richeton
- *
  */
 public class FormExpressionParser implements IParser {
-	private Pattern BEAN_REF;
-	private Pattern CURRENT_BEAN_REF;
+    private static final String CURRENT_NAME = "current";
 
-	private String currentName = "current";
-	private String fieldName = "field";
-	private String javascriptTemplate = "recupererValeur('$1')"; //$NON-NLS-1$
-	private String objectName = "object";
+    private Pattern BEAN_REF;
+    private Pattern CURRENT_BEAN_REF;
 
-	private String parentName = "parent";
+    private final String fieldName = "field";
+    private String javascriptTemplate = "recupererValeur('$1')"; //$NON-NLS-1$
+    private String objectName = "object";
 
-	private IParser parser;
+    private final String parentName = "parent";
 
-	public FormExpressionParser(IParser parser) {
-		this.parser = parser;
-	}
+    private final IParser parser;
 
-	/**
-	 * Get the current javascript value template.
-	 *
-	 * @return javascript expression template.
-	 */
-	public String getJavascriptTemplate() {
-		return javascriptTemplate;
-	}
+    public FormExpressionParser(IParser parser) {
+        this.parser = parser;
+    }
 
-	@Override
-	public void init() {
-		BEAN_REF = Pattern.compile(objectName + "\\[([A-Za-z0-9_\\.]+)\\]");
-		CURRENT_BEAN_REF = Pattern.compile(currentName + "\\[([A-Za-z0-9_\\.]+)\\]");
-	}
+    /**
+     * Get the current javascript value template.
+     *
+     * @return javascript expression template.
+     */
+    public String getJavascriptTemplate() {
+        return javascriptTemplate;
+    }
 
-	@Override
-	public IExpression parseExpression(String expressionString) {
-		String e = expressionString;
+    @Override
+    public void init() {
+        BEAN_REF = Pattern.compile(objectName + "\\[([A-Za-z0-9_\\.]+)\\]");
+        CURRENT_BEAN_REF = Pattern.compile(CURRENT_NAME + "\\[([A-Za-z0-9_\\.]+)\\]");
+    }
 
-		GenericReplace objectReplace = new GenericReplace(BEAN_REF, "$1");
-		e = objectReplace.perform(e);
+    @Override
+    public IExpression parseExpression(String expressionString) {
+        String e = expressionString;
 
-		GenericReplace currentReplace = new GenericReplace(CURRENT_BEAN_REF, "$1");
-		e = currentReplace.perform(e);
+        GenericReplace objectReplace = new GenericReplace(BEAN_REF, "$1");
+        e = objectReplace.perform(e);
 
-		e = new ParentReplace().perform(e);
+        GenericReplace currentReplace = new GenericReplace(CURRENT_BEAN_REF, "$1");
+        e = currentReplace.perform(e);
 
-		try {
-			ServerSideFormExpression fe = new ServerSideFormExpression(parser.parseExpression(e));
-			fe.setDependencies(new HashSet<String>(objectReplace.getMatchedItems()));
-			fe.setText(expressionString);
-			return fe;
-		} catch (ParseException e1) {
-			e1.setOriginalExpression(expressionString);
-			throw e1;
-		}
-	}
+        e = new ParentReplace().perform(e);
 
-	public IExpression parseExpression(String expressionString, boolean clientSide) {
+        try {
+            ServerSideFormExpression fe = new ServerSideFormExpression(parser.parseExpression(e));
+            fe.setDependencies(new HashSet<>(objectReplace.getMatchedItems()));
+            fe.setText(expressionString);
+            return fe;
+        } catch (ParseException e1) {
+            e1.setOriginalExpression(expressionString);
+            throw e1;
+        }
+    }
 
-		// If server side, with the main method.
-		if (!clientSide) {
-			return parseExpression(expressionString);
-		}
+    public IExpression parseExpression(String expressionString, boolean clientSide) {
 
-		String e = expressionString;
+        // If server side, with the main method.
+        if (!clientSide) {
+            return parseExpression(expressionString);
+        }
 
-		GenericReplace objectReplace = new GenericReplace(BEAN_REF, "$1");
-		e = objectReplace.perform(e);
+        String e = expressionString;
 
-		GenericReplace currentReplace = new GenericReplace(CURRENT_BEAN_REF, "$1");
-		e = currentReplace.perform(e);
+        GenericReplace objectReplace = new GenericReplace(BEAN_REF, "$1");
+        e = objectReplace.perform(e);
 
-		e = new ParentReplace().perform(e);
+        GenericReplace currentReplace = new GenericReplace(CURRENT_BEAN_REF, "$1");
+        e = currentReplace.perform(e);
 
-		try {
-			ClientSideFormExpression fe = new ClientSideFormExpression(parser.parseExpression(e));
-			fe.setDependencies(new HashSet<String>(objectReplace.getMatchedItems()));
-			fe.setText(expressionString);
+        e = new ParentReplace().perform(e);
 
-			return fe;
-		} catch (ParseException e1) {
-			e1.setOriginalExpression(expressionString);
-			throw e1;
-		}
-	}
+        try {
+            ClientSideFormExpression fe = new ClientSideFormExpression(parser.parseExpression(e));
+            fe.setDependencies(new HashSet<>(objectReplace.getMatchedItems()));
+            fe.setText(expressionString);
 
-	/**
-	 * Defines the javascript expression template used to retrieve a field
-	 * value.
-	 * <p>
-	 * The templace includes '$1' which should be replaces by field name.
-	 * <p>
-	 * This value must be set before initialization ({@link #init()}) and is
-	 * used during element loading.
-	 *
-	 *
-	 * @param jsTemplate
-	 *            The javascript template.
-	 */
+            return fe;
+        } catch (ParseException e1) {
+            e1.setOriginalExpression(expressionString);
+            throw e1;
+        }
+    }
 
-	public void setJavascriptTemplate(String jsTemplate) {
-		javascriptTemplate = jsTemplate;
+    /**
+     * Defines the javascript expression template used to retrieve a field
+     * value.
+     * <p>
+     * The templace includes '$1' which should be replaces by field name.
+     * <p>
+     * This value must be set before initialization ({@link #init()}) and is
+     * used during element loading.
+     * <p>
+     *
+     * @param jsTemplate The javascript template.
+     */
 
-	}
+    public void setJavascriptTemplate(String jsTemplate) {
+        javascriptTemplate = jsTemplate;
 
-	public void setObjectName(String objectName) {
-		this.objectName = objectName;
-	}
+    }
+
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
+    }
 }

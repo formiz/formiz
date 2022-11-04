@@ -1,21 +1,21 @@
 /**
  *  Copyright SCN Guichet Entreprises, Capgemini and contributors (2014-2016)
- *
+ * <p>
  * This software is a computer program whose purpose is to [describe
  * functionalities and technical features of your software].
- *
+ * <p>
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- *
+ * <p>
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- *
+ * <p>
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -26,7 +26,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- *
+ * <p>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -68,9 +68,9 @@ public class InMemoryMetadata implements FormizMetadata {
 	 * Constructor.
 	 */
 	public InMemoryMetadata() {
-		elements = new HashMap<String, SimpleElement>();
-		elementsByGroup = new HashMap<String, List<SimpleElement>>();
-		elementsByClass = new HashMap<String, List<SimpleElement>>();
+		elements = new HashMap<>();
+		elementsByGroup = new HashMap<>();
+		elementsByClass = new HashMap<>();
 	}
 
 	/*
@@ -86,20 +86,12 @@ public class InMemoryMetadata implements FormizMetadata {
 		if (!elements.containsKey(elementKey)) {
 			elements.put(elementKey, el);
 			// Index by group
-			List<SimpleElement> elementsOfGroup = elementsByGroup.get(el.getGroup());
-			if (elementsOfGroup == null) {
-				elementsOfGroup = new ArrayList<SimpleElement>();
-				elementsByGroup.put(el.getGroup(), elementsOfGroup);
-			}
+			List<SimpleElement> elementsOfGroup = elementsByGroup.computeIfAbsent(el.getGroup(), (String k) -> new ArrayList<>());
 			elementsOfGroup.add(el);
 
 			// Index by class.
 			String className = el.getClass().getName();
-			List<SimpleElement> elementsOfClass = elementsByClass.get(className);
-			if (elementsOfClass == null) {
-				elementsOfClass = new ArrayList<SimpleElement>();
-				elementsByClass.put(className, elementsOfClass);
-			}
+			List<SimpleElement> elementsOfClass = elementsByClass.computeIfAbsent(className, (String k) -> new ArrayList<>());
 			elementsOfClass.add(el);
 		} else {
 			LOGGER.warn("Duplicate element  id:{}  group:{}. The new instance was ignored.", el.getId(), el.getGroup());
@@ -131,7 +123,7 @@ public class InMemoryMetadata implements FormizMetadata {
 			return null;
 		}
 
-		List<SimpleElement> result = new ArrayList<SimpleElement>();
+		List<SimpleElement> result = new ArrayList<>();
 
 		for (SimpleElement fe : aElement) {
 			if (StringUtils.equals(id, fe.getId())) {
@@ -186,7 +178,7 @@ public class InMemoryMetadata implements FormizMetadata {
 	 */
 	@Override
 	public void removeElement(SimpleElement el) {
-		elements.remove(el);
+		elements.remove(el); //FIXME probable bug, map has string keys (not SimpleElement keys)
 		elementsByClass.get(el.getClass().getName()).remove(el);
 		elementsByGroup.get(el.getGroup()).remove(el);
 	}

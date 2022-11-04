@@ -1,82 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.formiz</groupId>
-	<artifactId>formiz</artifactId>
-	<name>Formiz</name>
-	<version>1.0.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.formiz</groupId>
+    <artifactId>formiz</artifactId>
+    <name>Formiz</name>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <springframework-version>3.2.7.RELEASE</springframework-version>
+        <springsecurity-version>3.1.3.RELEASE</springsecurity-version>
+        <webflow-version>2.4.0.M1</webflow-version>
+        <slf4j-version>1.7.5</slf4j-version>
+        <thymeleaf-version>2.0.15</thymeleaf-version>
+        <thymeleaf-extras-tiles2-version>2.0.0</thymeleaf-extras-tiles2-version>
+        <thymeleaf-extras-springsecurity3-version>2.0.0</thymeleaf-extras-springsecurity3-version>
+        <thymeleaf-extras-conditionalcomments-version>2.0.0</thymeleaf-extras-conditionalcomments-version>
+        <tiles-version>2.2.2</tiles-version>
+    </properties>
 
+    <modules>
+        <module>formiz-core</module>
+        <module>formiz-input-fods</module>
+        <module>formiz-form</module>
+    </modules>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.6</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>summary</report>
+                            <report>license</report>
+                            <report>scm</report>
+                            <report>distribution-management</report>
+                            <report>issue-tracking</report>
+                            <report>project-team</report>
+                            <report>mailing-list</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<springframework-version>3.2.7.RELEASE</springframework-version>
-		<springsecurity-version>3.1.3.RELEASE</springsecurity-version>
-		<webflow-version>2.4.0.M1</webflow-version>
-		<slf4j-version>1.7.5</slf4j-version>
-		<thymeleaf-version>2.0.15</thymeleaf-version>
-		<thymeleaf-extras-tiles2-version>2.0.0</thymeleaf-extras-tiles2-version>
-		<thymeleaf-extras-springsecurity3-version>2.0.0</thymeleaf-extras-springsecurity3-version>
-		<thymeleaf-extras-conditionalcomments-version>2.0.0</thymeleaf-extras-conditionalcomments-version>
-		<tiles-version>2.2.2</tiles-version>
-	</properties>
-
-	<modules>
-		<module>formiz-core</module>
-		<module>formiz-input-fods</module>
-		<module>formiz-form</module>
-	</modules>
-
-	<build>
-
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh</artifactId>
-				<version>2.6</version>
-			</extension>
-		</extensions>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.3</version>
-				<configuration>
-					<reportPlugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-project-info-reports-plugin</artifactId>
-							<reports>
-								<report>summary</report>
-								<report>license</report>
-								<report>scm</report>
-								<report>distribution-management</report>
-								<report>issue-tracking</report>
-								<report>project-team</report>
-								<report>mailing-list</report>
-							</reports>
-						</plugin>
-					</reportPlugins>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
-
-
-
-
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.6</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.12.0</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
